@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.routes.agent_routes import agent_router
+from app.api.routes.ws_route import router as ws_router
 
 api_router = APIRouter()
-api_router.include_router(agent_router, prefix="/api/agent", tags=["Agent"])
+api_router.include_router(ws_router, prefix="/api/ws", tags=["WS"])

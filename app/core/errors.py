@@ -23,9 +23,6 @@ def exception_handlers(app: FastAPI) -> None:
             content=payload,
         )
 
-    # -------------------------------------------------
-    # 404 – Route Not Found (FastAPI / Starlette)
-    # -------------------------------------------------
     @app.exception_handler(StarletteHTTPException)
     async def starlette_http_exception_handler(
         request: Request,

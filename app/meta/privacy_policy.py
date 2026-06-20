@@ -57,3 +57,17 @@ def get_privacy_policy():
     </html>
 """
     )
+
+
+def get_terms_of_service():
+    return HTMLResponse(
+        content="""
+    <html>
+    <head><title>Terms of Service - Staff AI</title></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px;">
+        <h1>Terms of Service for Staff AI</h1>
+        <p>By using Staff AI, you agree to the following terms of service:</p>
+    </body>
+    </html>
+"""
+    )

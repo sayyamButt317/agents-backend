@@ -4,6 +4,7 @@ fastapi
 uvicorn
 python-dotenv
 supabase
+fastapi
 
 openai==2.8.1
 openai-agents==0.5.0
@@ -13,7 +14,7 @@ langgraph-checkpoint-redis
 redis
 
 langfuse
-
+supabase
 pydantic>=2.9.0
 colorlog
 boto3

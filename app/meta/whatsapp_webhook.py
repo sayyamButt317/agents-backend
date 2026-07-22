@@ -1,4 +1,5 @@
-from fastapi import Request
+from datetime import datetime, timezone
+from fastapi import HTTPException, Request
 from app.config.credentials_config import config
 from fastapi import Response
 
@@ -17,6 +18,9 @@ async def verify_whatsapp_webhook(request: Request):
     return Response(status_code=403)
 
 
+# -------------------------
+# Webhook verification
+# -------------------------
 async def verify_webhook(request: Request):
     params = request.query_params
     if (
@@ -25,3 +29,5 @@ async def verify_webhook(request: Request):
     ):
         return Response(content=params.get("hub.challenge"), status_code=200)
     return Response(status_code=403)
+
+

@@ -15,3 +15,16 @@ def get_langfuse_client():
         host=config.LANGFUSE_BASE_URL,
     )
     return langfuse_client
+
+
+async def Whatsapp_Message_Generator(thread_id: str, msg_text: str, profile_name: str) -> str:
+    response = get_openai_client().responses.create(
+        model="gpt-5.5",
+        input=[
+            {
+                "role": "user",
+                "content": f"Thread ID: {thread_id}\nProfile Name: {profile_name}\nMessage Text: {msg_text}"
+            }
+        ]
+    )
+    return response.output_text

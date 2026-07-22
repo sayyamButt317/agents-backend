@@ -1,48 +1,54 @@
-from datetime import datetime
 from langgraph.types import Command
-from app.agents.aesthetic.state.aesthic_state import AestheticState
+
 from app.config.credentials_config import config
 from app.db.connection import get_supabase
+from app.agents.aesthetic.state.aesthic_state import AestheticState
 
 
-
-async def CheckAppointment(state: AestheticState) -> Command:
+async def CheckAppointment(state: AestheticState):
     try:
+        print("Entering into Checking appointment...")
         supabase = get_supabase()
-        today = datetime.now().date().isoformat()
         result = (
             supabase.table(config.SUPABASE_TABLE_APPOINTMENT)
             .select("*")
-            .eq("appointment_date", today)
+            .eq("companyname", state.get("company_name"))
+            .eq("appointment_date", state.get("appointment_date"))
+            .eq("appointment_time", state.get("appointment_time"))
+            .neq("status", "cancelled")
             .execute()
         )
 
         appointments = result.data or []
+
         if appointments:
             return Command(
                 update={
-                    "appointment": appointments,
-                    "has_appointment": True,
+                    "appointment": appointments[0],
+                    "response": (
+                        "Sorry, that appointment slot is already booked. "
+                        "Please choose another date or time."
+                    ),
                 },
-                goto="next_node",   # Replace with your next node
+                goto="generate_response",
             )
 
         return Command(
             update={
-                "appointment": [],
-                "has_appointment": False,
+                "appointment": None,
             },
-            goto="next_node",
+            goto="schedule_appointment",
         )
 
     except Exception as e:
-        print(f"Error checking appointments: {e}")
+        print(f"Error checking appointment: {e}")
 
         return Command(
             update={
-                "appointment": [],
-                "has_appointment": False,
                 "error": str(e),
+                "response": (
+                    "Sorry, I couldn't check appointment availability right now."
+                ),
             },
-            goto="error_handler",
+            goto="generate_response",
         )
